@@ -1,6 +1,7 @@
 package com.todocodeacademy.PruebaTecSupermercado.service;
 
 import com.todocodeacademy.PruebaTecSupermercado.dto.CategoriaDTO;
+import com.todocodeacademy.PruebaTecSupermercado.exception.NotFoundException;
 import com.todocodeacademy.PruebaTecSupermercado.mapper.Mapper;
 import com.todocodeacademy.PruebaTecSupermercado.model.Categoria;
 import com.todocodeacademy.PruebaTecSupermercado.repository.CategoriaRepository;
@@ -31,11 +32,22 @@ public class CategoriaService implements ICategoriaService {
 
     @Override
     public CategoriaDTO actualizarCategoria(Long id, CategoriaDTO categoriaDTO) {
-        return null;
+
+        Categoria cat = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException(("Categoria no encontrada")));
+
+        cat.setNombre(categoriaDTO.getNombre());
+
+        return Mapper.toDTO(repo.save(cat));
     }
 
     @Override
-    public void eliminarCategoria(Long id) {
+    public String eliminarCategoria(Long id) {
+        Categoria cat = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Categoria no encontrada"));
 
+        repo.deleteById(id);
+
+        return "Categoria eliminada.";
     }
 }

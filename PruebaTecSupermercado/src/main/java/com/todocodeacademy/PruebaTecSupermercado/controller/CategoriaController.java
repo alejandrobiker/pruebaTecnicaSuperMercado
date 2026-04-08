@@ -22,10 +22,23 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> crearCategoria (@RequestBody CategoriaDTO dto) {
+    public ResponseEntity<CategoriaDTO> crearCategoria(@RequestBody CategoriaDTO dto) {
         CategoriaDTO creado = categoriaService.crearCategoria(dto);
 
         return ResponseEntity.created(URI.create("/api/categorias" + creado.getId())).body(creado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoriaDTO> actualizarCategoria(@PathVariable Long id, @RequestBody CategoriaDTO dto) {
+        CategoriaDTO actualizado = categoriaService.actualizarCategoria(id, dto);
+
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> borrarCategoria (@PathVariable Long id) {
+
+        return ResponseEntity.ok(categoriaService.eliminarCategoria(id));
     }
 
 }

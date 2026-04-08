@@ -9,6 +9,6 @@ public interface ICategoriaService {
     List<CategoriaDTO> traerCategorias();
     CategoriaDTO crearCategoria(CategoriaDTO categoriaDTO);
     CategoriaDTO actualizarCategoria(Long id, CategoriaDTO categoriaDTO);
-    void eliminarCategoria(Long id);
+    String eliminarCategoria(Long id);
 
 }
