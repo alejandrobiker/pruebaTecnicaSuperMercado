@@ -1,9 +1,7 @@
 package com.todocodeacademy.PruebaTecSupermercado.mapper;
 
-import com.todocodeacademy.PruebaTecSupermercado.dto.DetalleVentaDTO;
-import com.todocodeacademy.PruebaTecSupermercado.dto.ProductoDTO;
-import com.todocodeacademy.PruebaTecSupermercado.dto.SucursalDTO;
-import com.todocodeacademy.PruebaTecSupermercado.dto.VentaDTO;
+import com.todocodeacademy.PruebaTecSupermercado.dto.*;
+import com.todocodeacademy.PruebaTecSupermercado.model.Categoria;
 import com.todocodeacademy.PruebaTecSupermercado.model.Producto;
 import com.todocodeacademy.PruebaTecSupermercado.model.Sucursal;
 import com.todocodeacademy.PruebaTecSupermercado.model.Venta;
@@ -23,6 +21,16 @@ public class Mapper {
                 .categoria(p.getCategoria())
                 .precio(p.getPrecio())
                 .cantidad(p.getCantidad())
+                .build();
+    }
+
+    //Mapeo de Categoria a CategoriaDTO
+    public static CategoriaDTO toDTO(Categoria c) {
+        if (c == null) return null;
+
+        return CategoriaDTO.builder()
+                .id(c.getId())
+                .nombre(c.getNombre())
                 .build();
     }
 
