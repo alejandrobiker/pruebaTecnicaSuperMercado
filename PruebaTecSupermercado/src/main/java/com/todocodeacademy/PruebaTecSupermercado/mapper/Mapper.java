@@ -18,9 +18,10 @@ public class Mapper {
         return ProductoDTO.builder()
                 .id(p.getId())
                 .nombre(p.getNombre())
-                .categoria(p.getCategoria())
                 .precio(p.getPrecio())
                 .cantidad(p.getCantidad())
+                // Extraemos el ID de la relación ManyToOne
+                .categoriaId(p.getCategoria() != null ? p.getCategoria().getId() : null)
                 .build();
     }
 
