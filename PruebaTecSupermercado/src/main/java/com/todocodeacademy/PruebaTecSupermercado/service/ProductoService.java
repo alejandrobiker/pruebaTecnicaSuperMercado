@@ -30,9 +30,9 @@ public class ProductoService implements IProductoService{
     @Override
     public ProductoDTO crearProducto(ProductoDTO productoDto) {
 
-        // Buscamos la categoría real en la BD usando el ID del DTO
-        Categoria cat = categoriaRepo.findById(productoDto.getCategoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        Long catId = productoDto.getCategoriaId();
+
+        Categoria cat = categoriaRepo.findById(catId).orElseThrow(() -> new NotFoundException("Categoria no existe"));
 
         Producto prod = Producto.builder()
                 .nombre(productoDto.getNombre())
@@ -50,9 +50,9 @@ public class ProductoService implements IProductoService{
         Producto prod = repo.findById(id)
             .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
 
-        // Buscamos la categoría real en la BD usando el ID del DTO
-        Categoria cat = categoriaRepo.findById(productoDto.getCategoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        Long catId = productoDto.getCategoriaId();
+
+        Categoria cat = categoriaRepo.findById(catId).orElse(null);
 
         prod.setNombre(productoDto.getNombre());
         prod.setCantidad(productoDto.getCantidad());
@@ -60,7 +60,6 @@ public class ProductoService implements IProductoService{
         prod.setCategoria(cat);
 
         return Mapper.toDTO(repo.save(prod));
-
     }
 
     @Override

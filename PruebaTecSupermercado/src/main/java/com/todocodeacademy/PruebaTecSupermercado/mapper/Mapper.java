@@ -15,13 +15,16 @@ public class Mapper {
     public static ProductoDTO toDTO(Producto p) {
         if (p == null) return null;
 
+        // Creamos el objeto para enviarlo en la respuesta
+        CategoriaDTO cat = p.getCategoria() != null ? new CategoriaDTO(p.getCategoria().getId(), p.getCategoria().getNombre()) : null;
+
         return ProductoDTO.builder()
                 .id(p.getId())
                 .nombre(p.getNombre())
                 .precio(p.getPrecio())
                 .cantidad(p.getCantidad())
                 // Extraemos el ID de la relación ManyToOne
-                .categoriaId(p.getCategoria() != null ? p.getCategoria().getId() : null)
+                .categoria(cat)
                 .build();
     }
 
