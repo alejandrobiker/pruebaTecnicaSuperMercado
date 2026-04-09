@@ -21,6 +21,11 @@ public class VentaController {
         return ResponseEntity.ok(ventaService.traerVentas());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<VentaDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(ventaService.findById(id));
+    }
+
     /**
      * Crea una venta usando directamente VentaDTO en la request (opción simple, sin request separado).
      * Se espera que el DTO traiga la información

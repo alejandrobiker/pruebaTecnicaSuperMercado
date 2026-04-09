@@ -4,10 +4,7 @@ import com.todocodeacademy.PruebaTecSupermercado.dto.DetalleVentaDTO;
 import com.todocodeacademy.PruebaTecSupermercado.dto.VentaDTO;
 import com.todocodeacademy.PruebaTecSupermercado.exception.NotFoundException;
 import com.todocodeacademy.PruebaTecSupermercado.mapper.Mapper;
-import com.todocodeacademy.PruebaTecSupermercado.model.DetalleVenta;
-import com.todocodeacademy.PruebaTecSupermercado.model.Producto;
-import com.todocodeacademy.PruebaTecSupermercado.model.Sucursal;
-import com.todocodeacademy.PruebaTecSupermercado.model.Venta;
+import com.todocodeacademy.PruebaTecSupermercado.model.*;
 import com.todocodeacademy.PruebaTecSupermercado.repository.ProductoRepository;
 import com.todocodeacademy.PruebaTecSupermercado.repository.SucursalRepository;
 import com.todocodeacademy.PruebaTecSupermercado.repository.VentaRepository;
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class VentaService implements IVentaService{
+public class VentaService implements IVentaService {
 
     @Autowired
     private VentaRepository ventaRepo;
@@ -40,6 +37,13 @@ public class VentaService implements IVentaService{
         }
 
         return ventasDto;
+    }
+
+    @Override
+    public VentaDTO findById(Long idVenta) {
+        Venta venta = ventaRepo.findById(idVenta).orElseThrow(() -> new NotFoundException("No existe la venta"));
+
+        return Mapper.toDTO(venta);
     }
 
     @Override
@@ -92,10 +96,7 @@ public class VentaService implements IVentaService{
         //guardamos en la BD
         vent = ventaRepo.save(vent);
 
-        //Mapeo de salida
-        VentaDTO ventaSalida = Mapper.toDTO(vent);
-
-        return ventaSalida;
+        return Mapper.toDTO(vent);
     }
 
     @Override
@@ -122,9 +123,7 @@ public class VentaService implements IVentaService{
         }
         ventaRepo.save(v);
 
-        VentaDTO ventaSalida = Mapper.toDTO(v);
-
-        return ventaSalida;
+        return Mapper.toDTO(v);
     }
 
     @Override
