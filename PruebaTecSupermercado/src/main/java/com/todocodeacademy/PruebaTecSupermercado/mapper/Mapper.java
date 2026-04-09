@@ -6,6 +6,7 @@ import com.todocodeacademy.PruebaTecSupermercado.model.Producto;
 import com.todocodeacademy.PruebaTecSupermercado.model.Sucursal;
 import com.todocodeacademy.PruebaTecSupermercado.model.Venta;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 public class Mapper {
@@ -18,6 +19,11 @@ public class Mapper {
         // Creamos el objeto para enviarlo en la respuesta
         CategoriaDTO cat = p.getCategoria() != null ? new CategoriaDTO(p.getCategoria().getId(), p.getCategoria().getNombre()) : null;
 
+        LocalDateTime updateFecha = p.getUpdatedAt();
+        if (p.getCreatedAt() != null && p.getCreatedAt().equals(p.getUpdatedAt())) {
+            updateFecha = null;
+        }
+
         return ProductoDTO.builder()
                 .id(p.getId())
                 .nombre(p.getNombre())
@@ -25,6 +31,8 @@ public class Mapper {
                 .cantidad(p.getCantidad())
                 // Extraemos el ID de la relación ManyToOne
                 .categoria(cat)
+                .createdAt(p.getCreatedAt())
+                .updatedAt(updateFecha)
                 .build();
     }
 

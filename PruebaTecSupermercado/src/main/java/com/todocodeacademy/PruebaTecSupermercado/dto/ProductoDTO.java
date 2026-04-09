@@ -1,7 +1,10 @@
 package com.todocodeacademy.PruebaTecSupermercado.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -20,4 +23,11 @@ public class ProductoDTO {
     // Se usa para ENVIAR el objeto completo al cliente
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private CategoriaDTO categoria;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updatedAt;
+
 }
