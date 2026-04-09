@@ -2,6 +2,10 @@ package com.todocodeacademy.PruebaTecSupermercado.controller;
 
 import com.todocodeacademy.PruebaTecSupermercado.dto.VentaDTO;
 import com.todocodeacademy.PruebaTecSupermercado.service.IVentaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ventas")
+@Tag(name = "Ventas", description = "Operaciones de ventas y detalles de ventas")
 public class VentaController {
 
     @Autowired
@@ -21,6 +26,12 @@ public class VentaController {
         return ResponseEntity.ok(ventaService.traerVentas());
     }
 
+    @Operation(summary = "Obtener venta por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Venta encontrado con éxito"),
+        @ApiResponse(responseCode = "404", description = "No existe un producto con ese ID"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<VentaDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(ventaService.findById(id));

@@ -2,6 +2,7 @@ package com.todocodeacademy.PruebaTecSupermercado.controller;
 
 import com.todocodeacademy.PruebaTecSupermercado.dto.SucursalDTO;
 import com.todocodeacademy.PruebaTecSupermercado.service.ISucursalService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/sucursales")
+@Tag(name = "Sucursales", description = "Operaciones para sucursales ")
 public class SucursalController {
 
     @Autowired
