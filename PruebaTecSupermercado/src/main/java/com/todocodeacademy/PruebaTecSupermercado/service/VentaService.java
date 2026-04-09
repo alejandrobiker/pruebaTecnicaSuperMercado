@@ -11,6 +11,7 @@ import com.todocodeacademy.PruebaTecSupermercado.repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,55 +49,47 @@ public class VentaService implements IVentaService {
 
     @Override
     public VentaDTO crearVenta(VentaDTO ventaDto) {
-
-        //Validaciones
+        // Validaciones
         if (ventaDto == null) throw new RuntimeException("VentaDTO es null");
         if (ventaDto.getIdSucursal() == null) throw new RuntimeException("Debe indicar la sucursal");
         if (ventaDto.getDetalle() == null || ventaDto.getDetalle().isEmpty())
             throw new RuntimeException("Debe incluir al menos un producto");
 
-        //Buscar la sucursal
+        // Buscar la sucursal
         Sucursal suc = sucursalRepo.findById(ventaDto.getIdSucursal()).orElse(null);
         if (suc == null) {
             throw new NotFoundException("Sucursal no encontrada");
         }
 
-        //Crear la venta
+        // Crear la venta
         Venta vent = new Venta();
-        vent.setFecha(ventaDto.getFecha());
+        vent.setFecha(LocalDate.now());
         vent.setEstado(ventaDto.getEstado());
         vent.setSucursal(suc);
-        vent.setTotal(ventaDto.getTotal());
 
-         // La lista de detalles
-        // --> Acá están los productos
+        // Lista de detalles
         List<DetalleVenta> detalles = new ArrayList<>();
-        Double totalCalculado = 0.0;
-
+        double totalCalculado = 0.0;
         for (DetalleVentaDTO detDTO : ventaDto.getDetalle()) {
             // Buscar producto por id (tu detDTO usa id como id de producto)
-            Producto p = productoRepo.findByNombre(detDTO.getNombreProd()).orElse(null);
-            if (p == null)
-            {throw new RuntimeException("Producto no encontrado: " + detDTO.getNombreProd());}
+            Producto p = productoRepo.findById(detDTO.getId()).orElse(null);
+            if (p == null) throw new RuntimeException("Producto no encontrado");
 
-         //Crear detalle
-         DetalleVenta detalleVent = new DetalleVenta();
+            // Crear detalle
+            DetalleVenta detalleVent = new DetalleVenta();
             detalleVent.setProd(p);
-            detalleVent.setPrecio(detDTO.getPrecio());
+            detalleVent.setPrecio(p.getPrecio());
             detalleVent.setCantProd(detDTO.getCantProd());
             detalleVent.setVenta(vent);
 
             detalles.add(detalleVent);
-            totalCalculado = totalCalculado+(detDTO.getPrecio()*detDTO.getCantProd());
-
+            totalCalculado = totalCalculado+(p.getPrecio()*detDTO.getCantProd());
+            vent.setTotal(totalCalculado);
         }
-        //Seteamos la lista de detalle Venta
+
         vent.setDetalle(detalles);
 
-        //guardamos en la BD
-        vent = ventaRepo.save(vent);
-
-        return Mapper.toDTO(vent);
+        return Mapper.toDTO(ventaRepo.save(vent));
     }
 
     @Override

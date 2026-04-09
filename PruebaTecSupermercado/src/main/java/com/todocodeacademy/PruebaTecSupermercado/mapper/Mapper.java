@@ -7,6 +7,7 @@ import com.todocodeacademy.PruebaTecSupermercado.model.Sucursal;
 import com.todocodeacademy.PruebaTecSupermercado.model.Venta;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Mapper {
@@ -50,17 +51,18 @@ public class Mapper {
     public static VentaDTO toDTO(Venta venta) {
         if (venta == null) return null;
 
-        var detalle = venta.getDetalle().stream().map(det ->
-                DetalleVentaDTO.builder()
+        List<DetalleVentaDTO> detalleVenta = venta.getDetalle().stream()
+                .map(det ->
+                    DetalleVentaDTO.builder()
                         .id(det.getProd().getId())
                         .nombreProd(det.getProd().getNombre())
                         .cantProd(det.getCantProd())
                         .precio(det.getPrecio())
                         .subtotal(det.getPrecio() * det.getCantProd())
                         .build()
-        ).collect(Collectors.toList());
+        ).toList();
 
-        var total = detalle.stream()
+        double total = detalleVenta.stream()
                 .map(DetalleVentaDTO::getSubtotal)
                 .reduce(0.0, Double::sum);
 
@@ -69,7 +71,7 @@ public class Mapper {
                 .fecha(venta.getFecha())
                 .idSucursal(venta.getSucursal().getId())
                 .estado(venta.getEstado())
-                .detalle(detalle)
+                .detalle(detalleVenta)
                 .total(total)
                 .build();
     }
